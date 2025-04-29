@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "test version"
+title: "杂谈"
 date:   2025-4-29
 tags: [collection]
 comments: true
