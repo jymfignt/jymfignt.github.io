@@ -1,3 +1,3 @@
-new GitHubCalendar("#github-calendar", "octocat", {
+new GitHubCalendar("#github-calendar", "jymfignt", {
   responsive: true
 });
