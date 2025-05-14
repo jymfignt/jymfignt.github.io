@@ -1,49 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jingyim's Homepage</title>
-  <link rel="stylesheet" href="style.css"/>
-  <script src="script.js" defer></script>
-  <script src="libs/github-calendar.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Multi Search</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            font-size: 1.5em;
+            margin-top: 30px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+            padding-bottom: 30px;
+        }
+
+        form {
+            margin: 0 auto;
+            max-width: 500px;
+        }
+
+        input[type="search"] {
+            width: 60%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 16px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .google { background-color: #4285F4; }
+        .bing { background-color: #008373; }
+        .xiaohongshu { background-color: #fb4c53; }
+        .zhihu { background-color: #0084ff; }
+        .translate { background-color: #34a853; }
+        .chatgpt { background-color: #202123; }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9em;
+            color: #666;
+            background-color: #eee;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <section class="profile">
-      <img src="assets/avatar.png" alt="avatar" class="avatar"/>
-      <h1>Hello I'm <span class="highlight">Jingyim</span></h1>
-      <p>💻计算机专业本科生 </p>
-      <p>📌 All the <span class="quote">past</span> , all is  <span class="quote">overture</span>.</p>
-      <div class="icons">
-        <a href="#"><img src="assets/icons/github.svg"/></a>
-        <a href="#"><img src="assets/icons/email.svg"/></a>
-      </div>
-    </section>
+    <header>
+        Welcome to the searching page I'm improving!
+    </header>
 
-    <section class="calendar">
-      <div class="calendar-container" id="github-calendar"></div>
-    </section>
+    <main>
+        <form action="https://www.google.com/search" method="get">
+            <input autocomplete="off" name="q" placeholder="Search on Google" type="search">
+            <button class="google" type="submit">Google</button>
+        </form>
 
-    <section class="tags">
-    <span class="tag">前端</span>
-    <span class="tag">后端</span>
-    <span class="tag">操作系统</span>
-    <span class="tag">AI</span>
-    <span class="tag">Git</span>
-    </section>
+        <form action="https://www.bing.com/search" method="get">
+            <input autocomplete="off" name="q" placeholder="Search on Bing" type="search">
+            <button class="bing" type="submit">Bing</button>
+        </form>
 
- <section class="timeline">
-  <p>2021.9 - 就读于厦门大学马来西亚分校（计算机科学与技术）</p>
-  <p>2024.9 - 开始准备研究生申请（TUM、UCL等）</p>
-  <p>2025.6 - 本科毕业，目标进入欧洲名校读研</p>
-</section>
+        <form action="https://www.xiaohongshu.com/search_result" method="get">
+            <input autocomplete="off" name="keyword" placeholder="Search on 小红书" type="search">
+            <button class="xiaohongshu" type="submit">小红书</button>
+        </form>
 
-    <section class="cards">
-     <a href="https://github.com/jingyim" class="button">GitHub</a>
-    <a href="https://www.xiaohongshu.com/user/profile/5f3248c10000000001005336" class="button">小红书</a>
-    <a href="https://jingyim.github.io/multisearch.com" class="button">项目展示</a>
-    </section>
-  </div>
+        <form action="https://www.zhihu.com/search" method="get">
+            <input autocomplete="off" name="q" placeholder="Search on 知乎" type="search">
+            <button class="zhihu" type="submit">知乎</button>
+        </form>
+
+        <form action="https://translate.google.com/" method="get">
+            <input autocomplete="off" name="text" placeholder="Text to translate" type="search">
+            <button class="translate" type="submit">翻译</button>
+        </form>
+
+        <form action="https://chat.openai.com/" method="get" target="_blank">
+            <input autocomplete="off" name="q" placeholder="Chat with ChatGPT" type="search">
+            <button class="chatgpt" type="submit">ChatGPT</button>
+        </form>
+    </main>
+
+    <footer>
+        Copyright &copy; jym
+    </footer>
 </body>
 </html>
