@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>今天吃什么 - 最终版</title>
+  <!-- 保留原有 style 样式不变 -->
+ <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 侧栏样式 */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-section h3 {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 8px;
+        }
+
+        .history-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .history-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .top-foods {
+            list-style: none;
+        }
+
+        .top-foods li {
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 8px;
+            padding: 12px;
+            border-radius: 10px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .food-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .meal-selector {
+            margin-bottom: 20px;
+        }
+
+        .meal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .meal-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid transparent;
+        }
+
+        .meal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .meal-btn.active {
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            border: 2px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 地点选择器 */
+        .location-selector {
+            margin-bottom: 20px;
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .location-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .location-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .location-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .location-btn.active {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: 1px solid white;
+        }
+
+        #result {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+        }
+
+        .pointer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            margin-top: -30px;
+            margin-left: -30px;
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 5px 20px rgba(255, 71, 87, 0.4);
+            transition: all 0.2s ease;
+            border-radius: 5px;
+        }
+
+        .pointer:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 71, 87, 0.6);
+        }
+
+        .pointer:active {
+            transform: scale(0.95);
+        }
+
+        canvas {
+            position: relative;
+            z-index: 0;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 5px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .wheel-glow {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .spinning {
+            animation: pulse 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* 上传数据界面 */
+        .upload-view {
+            display: none;
+            padding: 30px;
+            color: white;
+        }
+
+        .upload-view.active {
+            display: block;
+        }
+
+        .upload-form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .form-group input::placeholder, .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-group select option {
+            background: #333;
+            color: white;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .form-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-btn.primary {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .form-btn.secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .form-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .file-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .history-view {
+            display: none;
+            padding: 30px;
+            color: white;
+        }
+
+        .history-view.active {
+            display: block;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .history-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .history-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .history-date {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .history-food {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .history-details {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* 移动端适配 */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 999;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                width: 100%;
+                padding-top: 80px;
+            }
+
+            .wheel-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            canvas {
+                width: 300px !important;
+                height: 300px !important;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .meal-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .container {
+                margin: 0 10px;
+            }
+        }
+
+        /* 通知样式 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .notification.success {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+        }
+
+        .notification.error {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+<body>
+    <!-- 移动端菜单按钮 -->
+  <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+
+    <div class="sidebar" id="sidebar">
+    <h2>🍽️ 美食记录</h2>
+    <div class="sidebar-section">
+      <button class="history-btn" onclick="showHistory()">📅 查看历史记录</button>
+      <button class="history-btn" onclick="showUploadData()" style="background: linear-gradient(45deg, #4CAF50, #45a049); margin-top: 10px;">📤 添加记录</button>
+      <button class="history-btn" onclick="exportData()" style="background: linear-gradient(45deg, #2196F3, #1976D2); margin-top: 10px;">📥 导出数据</button>
+      <button class="history-btn" onclick="clearHistory()" style="background: linear-gradient(45deg, #9E9E9E, #616161); margin-top: 10px;">🗑️ 清空所有数据</button>
+    </div>
+    <div class="sidebar-section">
+      <h3>🏆 最爱TOP5</h3>
+      <ul class="top-foods" id="topFoods"></ul>
+    </div>
+    <div class="sidebar-section">
+      <h3>📊 统计信息</h3>
+      <div style="color: rgba(255, 255, 255, 0.9); font-size: 0.9rem;">
+        <div style="margin-bottom: 8px;">总记录数：<span id="totalRecords">0</span></div>
+        <div style="margin-bottom: 8px;">本月用餐：<span id="monthlyRecords">0</span></div>
+        <div>本周用餐：<span id="weeklyRecords">0</span></div>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- 主要内容 -->
+    <div class="main-content">
+        <!-- 主界面 -->
+        <div class="container" id="mainView">
+            <h1>🍽️ 今天吃什么</h1>
+            <p class="subtitle">让转盘帮你做决定！</p>
+
+            <div class="meal-selector">
+                <div class="meal-buttons">
+                    <button class="meal-btn active" data-meal="breakfast">🌅 早餐</button>
+                    <button class="meal-btn" data-meal="lunch">☀️ 午餐</button>
+                    <button class="meal-btn" data-meal="dinner">🌙 晚餐</button>
+                </div>
+            </div>
+
+            <!-- 地点选择器 -->
+            <div class="location-selector" id="locationSelector">
+                <h4 style="color: rgba(255, 255, 255, 0.9); margin-bottom: 15px;">📍 选择地点</h4>
+                <div class="location-buttons">
+                    <!-- 地点按钮将通过JavaScript生成 -->
+                </div>
+            </div>
+
+            <div id="result">选择餐点和地点，点击指针开始！</div>
+
+            <div class="wheel-container">
+                <div class="wheel-glow"></div>
+                <canvas id="wheelCanvas" width="400" height="400"></canvas>
+                <div class="pointer" id="spinPointer"></div>
+            </div>
+        </div>
+
+        <!-- 历史记录界面 -->
+        <div class="history-view" id="historyView">
+            <div class="history-header">
+                <h2>📅 美食历史记录</h2>
+                <button class="back-btn" onclick="showMain()">返回</button>
+            </div>
+            <div class="history-grid" id="historyGrid">
+                <!-- 历史记录将通过JavaScript生成 -->
+            </div>
+        </div>
+
+        <!-- 上传数据界面 -->
+        <div class="upload-view" id="uploadView">
+            <div class="history-header">
+                <h2>📤 添加美食记录</h2>
+                <button class="back-btn" onclick="showMain()">返回</button>
+            </div>
+
+            <div class="upload-form">
+                <h3 style="margin-bottom: 20px; text-align: center;">手动添加记录</h3>
+
+                <div class="form-group">
+                    <label for="foodName">美食名称</label>
+                    <input type="text" id="foodName" placeholder="例如：🍜 拉面" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="mealType">餐点类型</label>
+                    <select id="mealType" required onchange="updateLocationDropdown()">
+                        <option value="">请选择</option>
+                        <option value="breakfast">🌅 早餐</option>
+                        <option value="lunch">☀️ 午餐</option>
+                        <option value="dinner">🌙 晚餐</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="locationSelect">地点</label>
+                    <select id="locationSelect" required>
+                        <option value="">请先选择餐点类型</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="eatDate">用餐日期</label>
+                    <input type="date" id="eatDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">备注（可选）</label>
+                    <textarea id="notes" placeholder="味道如何？和谁一起吃的？" rows="3"></textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="button" class="form-btn secondary" onclick="clearForm()">清空</button>
+                    <button type="button" class="form-btn primary" onclick="addRecord()">添加记录</button>
+                </div>
+
+                <hr style="margin: 30px 0; border: 1px solid rgba(255, 255, 255, 0.2);">
+
+                <h3 style="margin-bottom: 20px; text-align: center;">批量导入数据</h3>
+
+                <div class="form-group">
+                    <div class="file-upload" onclick="document.getElementById('csvFile').click()">
+                        <input type="file" id="csvFile" accept=".csv,.json" onchange="handleFileUpload(event)">
+                        <div>📁 点击选择文件</div>
+                        <div style="font-size: 0.9rem; margin-top: 8px; opacity: 0.8;">
+                            支持 CSV 或 JSON 格式
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; font-size: 0.9rem;">
+                    <strong>CSV 格式示例：</strong><br>
+                    food,meal,location,date,notes<br>
+                    🍜 拉面,lunch,restaurant,2024-01-15,很好吃<br>
+                    🥐 面包,breakfast,cafe,2024-01-16,
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+  <script>
+    // 获取DOM元素
+// 获取DOM元素
+const canvas = document.getElementById('wheelCanvas');
+const ctx = canvas.getContext('2d');
+const pointer = document.getElementById('spinPointer');
+const resultDisplay = document.getElementById('result');
+const mealButtons = document.querySelectorAll('.meal-btn');
+const wheelContainer = document.querySelector('.wheel-container');
+const locationSelector = document.getElementById('locationSelector');
+
+// 根据时间和地点的食物配置
+const foodOptions = {
+    breakfast: {
+        dorm: {
+            segments: ['冲剂', '小零食', '熬粥'],
+            colors: ['#FFE066', '#FFCC02', '#FFB347']
+        },
+        ly3: {
+            segments: ['中闽', '槟城', '穆斯林小炒'],
+            colors: ['#87CEEB', '#4682B4', '#6495ED']
+        },
+        d6: {
+            segments: ['美式早餐'],
+            colors: ['#DEB887']
+        },
+        b1: {
+            segments: [ '面包'],
+            colors: ['#F4A460']
+        },
+        bell: {
+            segments: ['星巴克', '其他'],
+            colors: ['#F4A460', '#DAA520']
+        }
+    },
+    lunch: {
+          dorm: {
+            segments: ['泡面'],
+            colors: ['#FFE066']
+        },
+        ly3: {
+            segments: ['中闽', '汉堡', '铁板烧', '小九州', '槟城', '板面', '穆斯林小炒', '麻辣香锅'],
+            colors: ['#87CEEB', '#4682B4', '#6495ED', '#1E90FF', '#0000FF', '#4169E1','#F4A460', '#DAA520']
+        },
+        d6: {
+            segments: ['泰餐芋圆冰', '大树下', 'G层角落', '杂菜饭', '蜀之味', '烧腊','兰州拉面','小云冰室','大拇指','喵喵轻食','大碗面','美式早餐','小台枫','披萨'],
+            colors: ['#DEB887', '#CD853F', '#D2691E', '#A0522D', '#8B4513', '#654321','#F4A460', '#DAA520', '#B8860B', '#CD853F', '#D2691E', '#BC8F8F', '#FFB84D', '#FFC966']
+        },
+        b1: {
+            segments: ['西餐厅', '中东1', '中东2', '轻食'],
+            colors: ['#F4A460', '#DAA520', '#B8860B', '#CD853F']
+        },
+        bell: {
+            segments: ['佳粤', '螺蛳粉', '麻辣烫', '湘菜', '轻食', '牛肉面', '其他'],
+            colors: ['#F4A460', '#DAA520', '#B8860B', '#CD853F', '#D2691E', '#BC8F8F', '#FFC966']
+        },
+        others: {
+            segments: ['Zus', '小巨蛋'],
+            colors: ['#FF6347', '#FF4500']
+        }
+    },
+    dinner: {
+              dorm: {
+            segments: ['泡面', '冲剂', '熬粥'],
+            colors: ['#FFE066', '#FFCC02', '#FFB347']
+        },
+        ly3: {
+            segments: ['中闽', '汉堡', '铁板烧', '小九州', '槟城', '板面', '穆斯林小炒', '麻辣香锅'],
+            colors: ['#87CEEB', '#4682B4', '#6495ED', '#1E90FF', '#0000FF', '#4169E1','#F4A460', '#DAA520']
+        },
+        d6: {
+            segments: ['泰餐芋圆冰', '大树下', 'G层角落', '杂菜饭', '蜀之味', '烧腊','兰州拉面','小云冰室','大拇指','喵喵轻食','大碗面','美式早餐','小台枫','披萨'],
+            colors: ['#DEB887', '#CD853F', '#D2691E', '#A0522D', '#8B4513', '#654321','#F4A460', '#DAA520', '#B8860B', '#CD853F', '#D2691E', '#BC8F8F', '#FFB84D', '#FFC966']
+        },
+        b1: {
+            segments: ['西餐厅', '中东1', '中东2', '轻食'],
+            colors: ['#F4A460', '#DAA520', '#B8860B', '#CD853F']
+        },
+        bell: {
+            segments: ['佳粤', '螺蛳粉', '麻辣烫', '湘菜', '轻食', '牛肉面', '其他'],
+            colors: ['#F4A460', '#DAA520', '#B8860B', '#CD853F', '#D2691E', '#BC8F8F', '#FFC966']
+        },
+        others: {
+            segments: ['Zus', '小巨蛋'],
+            colors: ['#FF6347', '#FF4500']
+        }
+    }
+};
+
+   const locationOptions = {
+        breakfast: {
+            dorm: '🏠 宿舍',
+            ly3: 'LY3',
+            d6: 'D6',
+            b1: 'B1',
+            bell: 'Bell',
+            others: '其他'
+        },
+        lunch: {
+            dorm: '🏠 宿舍',
+            ly3: 'LY3',
+            d6: 'D6',
+            b1: 'B1',
+            bell: 'Bell',
+            others: '其他'
+        },
+        dinner: {
+            dorm: '🏠 宿舍',
+            ly3: 'LY3',
+            d6: 'D6',
+            b1: 'B1',
+            bell: 'Bell',
+            others: '其他'
+        }
+    };
+
+let currentMeal = '';
+let currentLocation = '';
+let startAngle = 0;
+let isSpinning = false;
+
+// 用户数据存储
+let foodHistory = [];
+let foodCounts = {};
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 设置默认日期为今天
+    document.getElementById('eatDate').valueAsDate = new Date();
+
+    loadData();
+    updateStatistics();
+    updateTopFoods();
+
+    // 初始状态 - 隐藏转盘，显示选择提示
+    hideWheel();
+
+    // 绑定事件
+    bindEvents();
+});
+
+function bindEvents() {
+    // 餐点按钮事件
+    mealButtons.forEach(btn => {
+        btn.addEventListener('click', () => switchMeal(btn.dataset.meal));
+    });
+
+    // 转盘点击事件
+    pointer.addEventListener('click', spinWheel);
+}
+
+// 隐藏转盘
+function hideWheel() {
+    wheelContainer.style.display = 'none';
+    locationSelector.style.display = 'none';
+    resultDisplay.textContent = '请先选择用餐时间';
+}
+
+// 显示转盘
+function showWheel() {
+    wheelContainer.style.display = 'block';
+    drawWheel();
+}
+
+// 加载数据
+function loadData() {
+    // 模拟一些初始数据
+    const sampleData = [
+        { food: '🍜 拉面', meal: 'lunch', location: 'restaurant', date: '2024-01-15', notes: '很好吃' },
+        { food: '🥐 面包', meal: 'breakfast', location: 'cafe', date: '2024-01-16', notes: '' },
+        { food: '🍲 火锅', meal: 'dinner', location: 'hotpot', date: '2024-01-14', notes: '和朋友一起' }
+    ];
+
+    foodHistory = sampleData;
+
+    // 统计食物次数
+    foodCounts = {};
+    foodHistory.forEach(record => {
+        foodCounts[record.food] = (foodCounts[record.food] || 0) + 1;
+    });
+}
+
+// 保存数据
+function saveData() {
+    // 在实际环境中可以使用localStorage
+    // localStorage.setItem('userFoodHistory', JSON.stringify(foodHistory));
+    // localStorage.setItem('userFoodCounts', JSON.stringify(foodCounts));
+}
+
+// 切换餐点
+function switchMeal(meal) {
+    if (isSpinning) return;
+
+    currentMeal = meal;
+    currentLocation = ''; // 重置地点选择
+
+    mealButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.meal === meal);
+    });
+
+    // 显示地点选择器
+    locationSelector.style.display = 'block';
+    updateLocationOptions();
+
+    // 隐藏转盘直到选择地点
+    wheelContainer.style.display = 'none';
+    resultDisplay.textContent = '请选择用餐地点';
+}
+
+// 更新地点选项
+function updateLocationOptions() {
+    const locationButtons = locationSelector.querySelector('.location-buttons');
+    locationButtons.innerHTML = '';
+
+    const locations = locationOptions[currentMeal];
+
+    Object.entries(locations).forEach(([key, value]) => {
+        const btn = document.createElement('button');
+        btn.className = 'location-btn';
+        btn.textContent = value;
+        btn.dataset.location = key;
+
+        btn.addEventListener('click', () => switchLocation(key));
+        locationButtons.appendChild(btn);
+    });
+}
+
+// 切换地点
+function switchLocation(location) {
+    if (isSpinning) return;
+
+    currentLocation = location;
+
+    document.querySelectorAll('.location-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.location === location);
+    });
+
+    // 显示转盘
+    showWheel();
+    resultDisplay.textContent = '点击中央指针开始转盘！';
+}
+
+// 绘制转盘
+function drawWheel() {
+    if (!currentMeal || !currentLocation) return;
+
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = 180;
+
+    // 获取当前时间和地点对应的食物选项
+    const foodData = foodOptions[currentMeal][currentLocation];
+    if (!foodData) return;
+
+    const segments = foodData.segments;
+    const colors = foodData.colors;
+    const anglePerSegment = (2 * Math.PI) / segments.length;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < segments.length; i++) {
+        const startAngle = i * anglePerSegment;
+        const endAngle = startAngle + anglePerSegment;
+
+        // 绘制扇形
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fillStyle = colors[i];
+        ctx.fill();
+
+        // 绘制边框
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // 绘制文字
+        const textAngle = startAngle + anglePerSegment / 2;
+        const textX = centerX + Math.cos(textAngle) * (radius * 0.65);
+        const textY = centerY + Math.sin(textAngle) * (radius * 0.65);
+
+        ctx.save();
+        ctx.translate(textX, textY);
+        ctx.rotate(textAngle + Math.PI / 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+
+        // 处理长文本
+        const text = segments[i];
+        if (text.length > 8) {
+            const words = text.split(' ');
+            ctx.fillText(words[0], 0, -5);
+            if (words[1]) ctx.fillText(words[1], 0, 10);
+        } else {
+            ctx.fillText(text, 0, 0);
+        }
+
+        ctx.restore();
+    }
+}
+
+// 转动转盘
+function spinWheel() {
+    if (isSpinning || !currentMeal || !currentLocation) return;
+
+    const foodData = foodOptions[currentMeal][currentLocation];
+    if (!foodData) return;
+
+    isSpinning = true;
+    wheelContainer.classList.add('spinning');
+
+    const segments = foodData.segments;
+    const anglePerSegment = (2 * Math.PI) / segments.length;
+
+    // 随机旋转角度（3-6圈）
+    const randomSpins = Math.random() * 3 + 3;
+    const finalAngle = randomSpins * 2 * Math.PI + Math.random() * 2 * Math.PI;
+
+    // 计算最终选中的项目
+    const normalizedAngle = (2 * Math.PI - (finalAngle % (2 * Math.PI))) % (2 * Math.PI);
+    const selectedIndex = Math.floor(normalizedAngle / anglePerSegment);
+    const selectedFood = segments[selectedIndex];
+
+    // 执行旋转动画
+    let currentAngle = 0;
+    const duration = 3000; // 3秒
+    const startTime = Date.now();
+
+    function animate() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // 使用缓出动画
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        currentAngle = finalAngle * easeOut;
+
+        // 旋转转盘
+        canvas.style.transform = `rotate(${currentAngle}rad)`;
+
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        } else {
+            // 动画结束
+            isSpinning = false;
+            wheelContainer.classList.remove('spinning');
+
+            // 显示结果
+            const locationText = locationOptions[currentMeal][currentLocation];
+            const mealText = {
+                breakfast: '🌅 早餐',
+                lunch: '☀️ 午餐',
+                dinner: '🌙 晚餐'
+            }[currentMeal];
+
+            resultDisplay.innerHTML = `
+                <div style="font-size: 1.8rem; margin-bottom: 10px;">${selectedFood}</div>
+                <div style="font-size: 1rem; opacity: 0.9;">${mealText} · ${locationText}</div>
+            `;
+
+            // 添加到历史记录
+            addToHistory(selectedFood);
+
+            // 显示通知
+            showNotification(`恭喜！${mealText}吃 ${selectedFood}`, 'success');
+        }
+    }
+
+    animate();
+}
+
+// 添加到历史记录
+function addToHistory(food) {
+    const today = new Date().toISOString().split('T')[0];
+    const locationText = locationOptions[currentMeal][currentLocation];
+
+    const record = {
+        food: food,
+        meal: currentMeal,
+        location: currentLocation,
+        locationText: locationText,
+        date: today,
+        notes: '转盘选择'
+    };
+
+    foodHistory.unshift(record);
+    foodCounts[food] = (foodCounts[food] || 0) + 1;
+
+    saveData();
+    updateStatistics();
+    updateTopFoods();
+}
+
+// 显示历史记录
+function showHistory() {
+    document.getElementById('mainView').style.display = 'none';
+    document.getElementById('uploadView').style.display = 'none';
+    document.getElementById('historyView').style.display = 'block';
+
+    const historyGrid = document.getElementById('historyGrid');
+    historyGrid.innerHTML = '';
+
+    if (foodHistory.length === 0) {
+        historyGrid.innerHTML = '<div style="text-align: center; grid-column: 1/-1; padding: 40px; opacity: 0.7;">暂无记录</div>';
+        return;
+    }
+
+    foodHistory.forEach(record => {
+        const card = document.createElement('div');
+        card.className = 'history-card';
+
+        const mealText = {
+            breakfast: '🌅 早餐',
+            lunch: '☀️ 午餐',
+            dinner: '🌙 晚餐'
+        }[record.meal];
+
+        card.innerHTML = `
+            <div class="history-date">${record.date}</div>
+            <div class="history-food">${record.food}</div>
+            <div class="history-details">
+                <div>${mealText} · ${record.locationText || locationOptions[record.meal][record.location]}</div>
+                ${record.notes ? `<div style="margin-top: 5px; font-style: italic;">${record.notes}</div>` : ''}
+            </div>
+        `;
+
+        historyGrid.appendChild(card);
+    });
+}
+
+// 显示添加记录界面
+function showUploadData() {
+    document.getElementById('mainView').style.display = 'none';
+    document.getElementById('historyView').style.display = 'none';
+    document.getElementById('uploadView').style.display = 'block';
+
+    updateLocationDropdown();
+}
+
+// 显示主界面
+function showMain() {
+    document.getElementById('historyView').style.display = 'none';
+    document.getElementById('uploadView').style.display = 'none';
+    document.getElementById('mainView').style.display = 'block';
+}
+
+// 更新地点下拉框
+function updateLocationDropdown() {
+    const mealType = document.getElementById('mealType').value;
+    const locationSelect = document.getElementById('locationSelect');
+
+    locationSelect.innerHTML = '<option value="">请选择地点</option>';
+
+    if (mealType && locationOptions[mealType]) {
+        Object.entries(locationOptions[mealType]).forEach(([key, value]) => {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = value;
+            locationSelect.appendChild(option);
+        });
+    }
+}
+
+// 添加记录
+function addRecord() {
+    const food = document.getElementById('foodName').value.trim();
+    const meal = document.getElementById('mealType').value;
+    const location = document.getElementById('locationSelect').value;
+    const date = document.getElementById('eatDate').value;
+    const notes = document.getElementById('notes').value.trim();
+
+    if (!food || !meal || !location || !date) {
+        showNotification('请填写所有必填项', 'error');
+        return;
+    }
+
+    const record = {
+        food: food,
+        meal: meal,
+        location: location,
+        locationText: locationOptions[meal][location],
+        date: date,
+        notes: notes
+    };
+
+    foodHistory.unshift(record);
+    foodCounts[food] = (foodCounts[food] || 0) + 1;
+
+    saveData();
+    updateStatistics();
+    updateTopFoods();
+
+    showNotification('记录添加成功！', 'success');
+    clearForm();
+}
+
+// 清空表单
+function clearForm() {
+    document.getElementById('foodName').value = '';
+    document.getElementById('mealType').value = '';
+    document.getElementById('locationSelect').innerHTML = '<option value="">请先选择餐点类型</option>';
+    document.getElementById('eatDate').valueAsDate = new Date();
+    document.getElementById('notes').value = '';
+}
+
+// 处理文件上传
+function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            let data;
+            if (file.name.endsWith('.json')) {
+                data = JSON.parse(e.target.result);
+            } else if (file.name.endsWith('.csv')) {
+                data = parseCSV(e.target.result);
+            } else {
+                throw new Error('不支持的文件格式');
+            }
+
+            importData(data);
+        } catch (error) {
+            showNotification('文件格式错误：' + error.message, 'error');
+        }
+    };
+    reader.readAsText(file);
+}
+
+// 解析CSV
+function parseCSV(csvText) {
+    const lines = csvText.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim());
+    const data = [];
+
+    for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',').map(v => v.trim());
+        const record = {};
+        headers.forEach((header, index) => {
+            record[header] = values[index] || '';
+        });
+        data.push(record);
+    }
+
+    return data;
+}
+
+// 导入数据
+function importData(data) {
+    let successCount = 0;
+
+    data.forEach(record => {
+        if (record.food && record.meal && record.location && record.date) {
+            const newRecord = {
+                food: record.food,
+                meal: record.meal,
+                location: record.location,
+                locationText: locationOptions[record.meal] ? locationOptions[record.meal][record.location] : record.location,
+                date: record.date,
+                notes: record.notes || ''
+            };
+
+            foodHistory.unshift(newRecord);
+            foodCounts[record.food] = (foodCounts[record.food] || 0) + 1;
+            successCount++;
+        }
+    });
+
+    if (successCount > 0) {
+        saveData();
+        updateStatistics();
+        updateTopFoods();
+        showNotification(`成功导入 ${successCount} 条记录`, 'success');
+    } else {
+        showNotification('没有有效的记录被导入', 'error');
+    }
+}
+
+// 导出数据
+function exportData() {
+    if (foodHistory.length === 0) {
+        showNotification('没有数据可以导出', 'error');
+        return;
+    }
+
+    const csvContent = 'food,meal,location,date,notes\n' +
+        foodHistory.map(record =>
+            `"${record.food}","${record.meal}","${record.location}","${record.date}","${record.notes}"`
+        ).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `美食记录_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+
+    showNotification('数据导出成功', 'success');
+}
+
+// 更新统计信息
+function updateStatistics() {
+    const totalRecords = foodHistory.length;
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    // 计算一周前的日期
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(now.getDate() - 7);
+
+    const monthlyRecords = foodHistory.filter(record => {
+        const recordDate = new Date(record.date);
+        return recordDate.getMonth() === currentMonth && recordDate.getFullYear() === currentYear;
+    }).length;
+
+    const weeklyRecords = foodHistory.filter(record => {
+        const recordDate = new Date(record.date);
+        return recordDate >= oneWeekAgo;
+    }).length;
+
+    document.getElementById('totalRecords').textContent = totalRecords;
+    document.getElementById('monthlyRecords').textContent = monthlyRecords;
+    document.getElementById('weeklyRecords').textContent = weeklyRecords;
+}
+
+// 更新TOP5食物
+function updateTopFoods() {
+    const topFoodsElement = document.getElementById('topFoods');
+
+    if (Object.keys(foodCounts).length === 0) {
+        topFoodsElement.innerHTML = '<li style="text-align: center; opacity: 0.7;">暂无数据，请添加记录</li>';
+        return;
+    }
+
+    const sortedFoods = Object.entries(foodCounts)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 5);
+
+    topFoodsElement.innerHTML = sortedFoods.map(([food, count]) =>
+        `<li>
+            <span>${food}</span>
+            <span class="food-count">${count}</span>
+        </li>`
+    ).join('');
+}
+
+// 显示通知
+function showNotification(message, type = 'success') {
+    // 移除现有通知
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    // 显示动画
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+
+    // 3秒后自动隐藏
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 300);
+    }, 3000);
+}
+
+// 切换侧栏（移动端）
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('open');
+}
+  </script>
+</body>
+</html>
