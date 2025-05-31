@@ -52,7 +52,9 @@ what-to-eat-spinner/
 
 ### ✅ 方法 2：部署到 GitHub Pages
 
-通过 `https://jymfignt.github.io/what-to-eat/` 使用
+通过 `https://jymfignt.github.io/what-to-eat` 使用
+
+[直达链接](https://jymfignt.github.io/what_to_eat)
 
 
 
