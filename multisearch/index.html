@@ -58,6 +58,9 @@
         .zhihu { background-color: #0084ff; }
         .translate { background-color: #34a853; }
         .chatgpt { background-color: #202123; }
+        .scholar { background-color: #1a73e8; }
+        .gemini { background-color: #9aa0a6; }
+        .grok { background-color: #000000; }
 
         footer {
             text-align: center;
@@ -78,12 +81,14 @@
             <input autocomplete="off" name="q" placeholder="Search on Google" type="search">
             <button class="google" type="submit">Google</button>
         </form>
-
         <form action="https://www.bing.com/search" method="get">
             <input autocomplete="off" name="q" placeholder="Search on Bing" type="search">
             <button class="bing" type="submit">Bing</button>
         </form>
-
+        <form action="https://scholar.google.com/scholar" method="get">
+            <input autocomplete="off" name="q" placeholder="Search academic papers" type="search">
+            <button class="scholar" type="submit">Google Scholar</button>
+        </form>
         <form action="https://www.xiaohongshu.com/search_result" method="get">
             <input autocomplete="off" name="keyword" placeholder="Search on 小红书" type="search">
             <button class="xiaohongshu" type="submit">小红书</button>
@@ -93,15 +98,21 @@
             <input autocomplete="off" name="q" placeholder="Search on 知乎" type="search">
             <button class="zhihu" type="submit">知乎</button>
         </form>
-
         <form action="https://translate.google.com/" method="get">
             <input autocomplete="off" name="text" placeholder="Text to translate" type="search">
             <button class="translate" type="submit">翻译</button>
         </form>
-
         <form action="https://chat.openai.com/" method="get" target="_blank">
             <input autocomplete="off" name="q" placeholder="Chat with ChatGPT" type="search">
             <button class="chatgpt" type="submit">ChatGPT</button>
+        </form>
+        <form action="https://gemini.google.com/app?hl=en-IN" method="get" target="_blank">
+            <input autocomplete="off" name="q" placeholder="Chat with Gemini" type="search">
+            <button class="gemini" type="submit">Gemini</button>
+        </form>
+        <form action="https://grok.com/?referrer=website" method="get" target="_blank">
+            <input autocomplete="off" name="q" placeholder="Chat with Grok" type="search">
+            <button class="grok" type="submit">Grok</button>
         </form>
     </main>
 
