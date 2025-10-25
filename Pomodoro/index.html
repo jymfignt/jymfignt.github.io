@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄钟</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f5f5f5;
+            color: #333;
+            position: relative;
+        }
+
+        .quote-box {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            max-width: 300px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            z-index: 100;
+        }
+
+        .quote-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #555;
+            font-style: italic;
+            margin-bottom: 15px;
+            min-height: 50px;
+        }
+
+        .quote-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .quote-btn {
+            flex: 1;
+            padding: 8px 15px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 8px;
+            color: #666;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quote-btn:hover {
+            background: #e8e8e8;
+        }
+
+        .custom-quote-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            color: #333;
+            font-size: 0.85rem;
+            resize: vertical;
+            min-height: 60px;
+            display: none;
+            outline: none;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .timer-circle {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 40px;
+        }
+
+        .circle-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .circle-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#333 0deg, transparent 0deg);
+            transition: background 0.3s ease;
+        }
+
+        .timer-display {
+            position: relative;
+            z-index: 2;
+            font-size: 4rem;
+            font-weight: 200;
+            letter-spacing: 4px;
+        }
+
+        .mode-tabs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .mode-btn {
+            padding: 12px 24px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 25px;
+            color: #666;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-weight: 300;
+        }
+
+        .mode-btn:hover {
+            background: #e8e8e8;
+            transform: translateY(-2px);
+        }
+
+        .mode-btn.active {
+            background: #333;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .control-btn {
+            padding: 15px 40px;
+            background: #333;
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .control-btn:hover {
+            background: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .stats {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .custom-input {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .custom-input input {
+            padding: 12px 20px;
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            color: #333;
+            font-size: 1rem;
+            width: 150px;
+            text-align: center;
+            outline: none;
+        }
+
+        .custom-input input::placeholder {
+            color: #999;
+        }
+
+        .set-btn {
+            padding: 12px 30px;
+            background: #333;
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .set-btn:hover {
+            background: #000;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="quote-box">
+        <div class="quote-text" id="quoteText">专注当下，成就未来</div>
+        <div class="quote-buttons">
+            <button class="quote-btn" id="nextQuoteBtn">换一句</button>
+            <button class="quote-btn" id="customQuoteBtn">自定义</button>
+        </div>
+        <textarea class="custom-quote-input" id="customQuoteInput" placeholder="输入你的励志语录..."></textarea>
+    </div>
+
+    <div class="container">
+        <h1>🍅 番茄钟</h1>
+        
+        <div class="mode-tabs">
+            <button class="mode-btn active" data-mode="pomodoro">专注</button>
+            <button class="mode-btn" data-mode="short">短休息</button>
+            <button class="mode-btn" data-mode="long">长休息</button>
+            <button class="mode-btn" data-mode="custom">自定义</button>
+        </div>
+
+        <div class="custom-input" id="customInput" style="display: none;">
+            <input type="number" id="customMinutes" min="1" max="120" placeholder="输入分钟数">
+            <button class="set-btn" id="setCustomBtn">设置</button>
+        </div>
+
+        <div class="timer-circle">
+            <div class="circle-bg">
+                <div class="circle-progress"></div>
+                <div class="timer-display">25:00</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" id="startBtn">开始</button>
+            <button class="control-btn" id="resetBtn">重置</button>
+        </div>
+
+        <div class="stats">
+            <p>今日累计专注: <span id="totalMinutes">0</span> 分钟</p>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            "专注当下，成就未来",
+            "每一次专注，都是对梦想的投资",
+            "时间不会辜负每一个努力的人",
+            "保持专注，让优秀成为习惯",
+            "今天的努力，是明天的底气",
+            "一次只做一件事，做到最好",
+            "专注力是成功的超能力",
+            "不积跬步，无以至千里",
+            "坚持不懈，直到成功",
+            "你的专注决定你的高度",
+            "静下心来，全力以赴",
+            "每一分钟都值得珍惜"
+        ];
+
+        let customQuotes = [];
+        let isCustomMode = false;
+
+        const modes = {
+            pomodoro: 25 * 60,
+            short: 5 * 60,
+            long: 15 * 60
+        };
+
+        let currentMode = 'pomodoro';
+        let timeLeft = modes[currentMode];
+        let totalTime = modes[currentMode];
+        let isRunning = false;
+        let timerInterval = null;
+        let totalMinutesUsed = 0;
+
+        const timerDisplay = document.querySelector('.timer-display');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const circleProgress = document.querySelector('.circle-progress');
+        const totalMinutesEl = document.getElementById('totalMinutes');
+        const modeBtns = document.querySelectorAll('.mode-btn');
+        const customInput = document.getElementById('customInput');
+        const customMinutes = document.getElementById('customMinutes');
+        const setCustomBtn = document.getElementById('setCustomBtn');
+        const quoteText = document.getElementById('quoteText');
+        const nextQuoteBtn = document.getElementById('nextQuoteBtn');
+        const customQuoteBtn = document.getElementById('customQuoteBtn');
+        const customQuoteInput = document.getElementById('customQuoteInput');
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            const progress = ((totalTime - timeLeft) / totalTime) * 360;
+            circleProgress.style.background = `conic-gradient(#333 ${progress}deg, transparent ${progress}deg)`;
+        }
+
+        function updateTotalMinutes() {
+            totalMinutesEl.textContent = totalMinutesUsed;
+        }
+
+        function startTimer() {
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(timerInterval);
+                startBtn.textContent = '开始';
+            } else {
+                isRunning = true;
+                startBtn.textContent = '暂停';
+                
+                timerInterval = setInterval(() => {
+                    if (timeLeft > 0) {
+                        timeLeft--;
+                        updateDisplay();
+                        
+                        // 每60秒增加1分钟统计
+                        if ((totalTime - timeLeft) % 60 === 0 && timeLeft !== totalTime) {
+                            totalMinutesUsed++;
+                            updateTotalMinutes();
+                        }
+                    } else {
+                        clearInterval(timerInterval);
+                        isRunning = false;
+                        startBtn.textContent = '开始';
+                        
+                        // 任务完成，统计剩余的不足1分钟的时间
+                        const completedMinutes = Math.ceil(totalTime / 60);
+                        const alreadyCounted = Math.floor(totalTime / 60);
+                        if (completedMinutes > alreadyCounted) {
+                            totalMinutesUsed += (completedMinutes - alreadyCounted);
+                            updateTotalMinutes();
+                        }
+                        
+                        alert('时间到！');
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = modes[currentMode];
+            totalTime = modes[currentMode];
+            startBtn.textContent = '开始';
+            updateDisplay();
+        }
+
+        function switchMode(mode) {
+            clearInterval(timerInterval);
+            isRunning = false;
+            currentMode = mode;
+            
+            if (mode === 'custom') {
+                customInput.style.display = 'flex';
+            } else {
+                customInput.style.display = 'none';
+                timeLeft = modes[mode];
+                totalTime = modes[mode];
+                startBtn.textContent = '开始';
+                updateDisplay();
+            }
+
+            modeBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function setCustomTime() {
+            const minutes = parseInt(customMinutes.value);
+            if (minutes && minutes > 0 && minutes <= 120) {
+                timeLeft = minutes * 60;
+                totalTime = minutes * 60;
+                modes.custom = minutes * 60;
+                startBtn.textContent = '开始';
+                updateDisplay();
+                customMinutes.value = '';
+            } else {
+                alert('请输入1-120之间的分钟数');
+            }
+        }
+
+        function getRandomQuote() {
+            const allQuotes = isCustomMode && customQuotes.length > 0 ? customQuotes : quotes;
+            const randomIndex = Math.floor(Math.random() * allQuotes.length);
+            return allQuotes[randomIndex];
+        }
+
+        function showNewQuote() {
+            quoteText.textContent = getRandomQuote();
+        }
+
+        function toggleCustomQuoteInput() {
+            if (customQuoteInput.style.display === 'none' || !customQuoteInput.style.display) {
+                customQuoteInput.style.display = 'block';
+                customQuoteBtn.textContent = '保存';
+            } else {
+                const inputText = customQuoteInput.value.trim();
+                if (inputText) {
+                    customQuotes.push(inputText);
+                    isCustomMode = true;
+                    quoteText.textContent = inputText;
+                    customQuoteInput.value = '';
+                }
+                customQuoteInput.style.display = 'none';
+                customQuoteBtn.textContent = '自定义';
+            }
+        }
+
+        startBtn.addEventListener('click', startTimer);
+        resetBtn.addEventListener('click', resetTimer);
+        setCustomBtn.addEventListener('click', setCustomTime);
+        nextQuoteBtn.addEventListener('click', showNewQuote);
+        customQuoteBtn.addEventListener('click', toggleCustomQuoteInput);
+        
+        customMinutes.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                setCustomTime();
+            }
+        });
+        
+        customQuoteInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                toggleCustomQuoteInput();
+            }
+        });
+        
+        modeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => switchMode(e.target.dataset.mode));
+        });
+
+        updateDisplay();
+    </script>
+</body>
+</html>
