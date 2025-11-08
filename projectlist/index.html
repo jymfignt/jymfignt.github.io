@@ -522,20 +522,6 @@
                 <a href="https://jymfignt.github.io/Pomodoro/" class="project-link">查看项目 →</a>
             </div>
         </div>
-                    <div class="project-card">
-                <h2 class="project-title">PDF图片可视化图库生成器</h2>
-                <p class="project-description">
-                    PDF图片可视化图库生成器
-
-基于R和Poppler-utils的本地化PDF图片提取解决方案。通过命令行批量提取PDF图片，自动生成Obsidian兼容的Markdown可视化索引，实现高效离线图片管理和浏览。
-                </p>
-                <div class="project-tags">
-                   <span class="tag">R</span>
-                   <span class="tag">C++</span>
-                   <span class="tag">shell</span>
-                </div>
-                <a href="https://github.com/jymfignt/pdfAbstractImages" class="project-link">查看项目 →</a>
-            </div>
     </div>
 
     <!-- 代码提示模态框 -->
@@ -549,7 +535,8 @@
             <div class="code-section">
                 <h3 class="code-section-title">📍 添加位置</h3>
                 <div class="code-instruction">
-                    在您的 HTML 文件中，找到 <strong>&lt;div class="projects-grid"&gt;</strong> 标签内部，将以下代码添加到最后一个项目卡片之后（在 &lt;/div&gt; 结束标签之前）
+                    在您的 HTML 文件中，找到 <strong>&lt;div class="projects-grid"&gt;</strong> 标签内部，将以下代码添加到最后一个项目卡片之后（在 &lt;/div&gt; 结束标签之前）。<br><br>
+                    <strong>⚠️ 注意：</strong>添加代码到 GitHub 后，请刷新此页面查看新项目。当前页面不会自动显示新添加的项目。
                 </div>
             </div>
 
@@ -600,28 +587,6 @@
     </div>
 
     <script>
-        // 本地存储管理
-        const STORAGE_KEY = 'userProjects';
-        
-        // 加载保存的项目
-        function loadProjects() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                const projects = JSON.parse(saved);
-                projects.forEach(project => {
-                    createProjectCard(project, false);
-                });
-            }
-        }
-
-        // 保存项目到本地存储
-        function saveProject(project) {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            const projects = saved ? JSON.parse(saved) : [];
-            projects.push(project);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
-        }
-
         // 标签管理
         const tagsContainer = document.getElementById('tagsContainer');
         const tagInput = document.getElementById('tagInput');
@@ -725,17 +690,10 @@
                 title: title,
                 description: description,
                 tags: [...tags],
-                link: link,
-                timestamp: new Date().getTime()
+                link: link
             };
 
-            // 保存到本地存储
-            saveProject(project);
-
-            // 创建并显示项目卡片
-            createProjectCard(project, true);
-
-            // 生成 HTML 代码
+            // 生成 HTML 代码（不在页面显示，只提示代码）
             generateHTMLCode(project);
 
             // 重置表单
@@ -768,40 +726,6 @@
             generatedCode.textContent = htmlCode;
         }
 
-        // 创建项目卡片
-        function createProjectCard(project, animate) {
-            const projectCard = document.createElement('div');
-            projectCard.className = 'project-card';
-            if (animate) {
-                projectCard.style.animationDelay = '0s';
-            }
-            
-            let tagsHTML = '';
-            project.tags.forEach(tag => {
-                tagsHTML += `<span class="tag">${tag}</span>`;
-            });
-
-            projectCard.innerHTML = `
-                <h2 class="project-title">${project.title}</h2>
-                <p class="project-description">${project.description}</p>
-                <div class="project-tags">
-                    ${tagsHTML}
-                </div>
-                ${project.link ? `<a href="${project.link}" class="project-link" target="_blank">查看项目 →</a>` : ''}
-            `;
-
-            // 添加点击事件
-            projectCard.addEventListener('click', function(e) {
-                if (!e.target.classList.contains('project-link')) {
-                    const linkElement = this.querySelector('.project-link');
-                    if (linkElement) linkElement.click();
-                }
-            });
-
-            // 添加到网格
-            projectsGrid.appendChild(projectCard);
-        }
-
         // 为项目卡片添加点击效果
         document.querySelectorAll('.project-card').forEach(card => {
             card.addEventListener('click', function(e) {
@@ -824,9 +748,6 @@
                 }
             });
         });
-
-        // 页面加载时加载保存的项目
-        window.addEventListener('DOMContentLoaded', loadProjects);
     </script>
 </body>
 </html>
