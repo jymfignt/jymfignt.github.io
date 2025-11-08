@@ -1,4 +1,138 @@
-.back-button:hover {
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目展示 - Projects</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f7fafc;
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 1.2rem;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+            animation-fill-mode: both;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .project-icon {
+            width: 60px;
+            height: 60px;
+            background: #4299e1;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2d3748;
+        }
+
+        .project-description {
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background: #edf2f7;
+            color: #4a5568;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .project-link {
+            display: inline-block;
+            color: #4299e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: #2b6cb0;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: white;
+            color: #4a5568;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            z-index: 100;
+            border: 1px solid #e2e8f0;
+        }
+
+        .back-button:hover {
             background: #2d3748;
             color: white;
             transform: translateX(-5px);
@@ -180,3 +314,274 @@
                 transform: translateY(0);
             }
         }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .project-card:nth-child(1) { animation-delay: 0.1s; }
+        .project-card:nth-child(2) { animation-delay: 0.2s; }
+        .project-card:nth-child(3) { animation-delay: 0.3s; }
+        .project-card:nth-child(4) { animation-delay: 0.4s; }
+        .project-card:nth-child(5) { animation-delay: 0.5s; }
+        .project-card:nth-child(6) { animation-delay: 0.6s; }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .back-button {
+                top: 20px;
+                left: 20px;
+                padding: 10px 20px;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .add-project-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="https://jymfignt.github.io/" class="back-button">← 返回首页</a>
+    
+    <div class="container">
+        <header>
+            <h1>我的项目</h1>
+            <p class="subtitle">探索我的开源项目和作品集</p>
+        </header>
+
+        <div class="projects-grid">
+            <div class="project-card">
+                <h2 class="project-title">今天吃什么 - 美食选择转盘</h2>
+                <p class="project-description">
+                    这是一个基于Web的美食选择工具，通过转盘随机选择吃什么，被学校食堂整不会了的发疯之作，仍需完善
+                </p>
+                <div class="project-tags">
+                   <span class="tag">CSS3</span>
+                    <span class="tag">Html5</span>
+                    <span class="tag">JavaScript</span>
+                </div>
+                <a href="https://jymfignt.github.io/what_to_eat/" class="project-link">查看项目 →</a>
+            </div>
+
+            <div class="project-card">
+                <h2 class="project-title">Multisearch 多搜索引擎聚合</h2>
+                <p class="project-description">
+                    听CS50x网课时偶然灵感，也是让自己多专注少分神的一个简易网页。
+                    这是一个集成多个搜索引擎和工具的聚合页面，主要包括Google, Bing, Google Scholar, 小红书, 知乎, ChatGPT, Gemini, Grok, Google翻译
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Html5</span>
+                    <span class="tag">CSS3</span>
+                </div>
+                <a href="https://jymfignt.github.io/multisearch/" class="project-link">查看项目 →</a>
+            </div>
+
+            <div class="project-card">
+                <h2 class="project-title">Pomodoro（番茄钟）</h2>
+                <p class="project-description">
+                    非常简易的网页版番茄钟，可以自定义专注时间和休息时间、播放励志语录，记录本日累积专注时间等等
+                </p>
+                <div class="project-tags">
+                    <span class="tag">CSS3</span>
+                    <span class="tag">Html5</span>
+                    <span class="tag">JavaScript</span>
+                </div>
+                <a href="https://jymfignt.github.io/Pomodoro/" class="project-link">查看项目 →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加项目按钮 -->
+    <button class="add-project-btn" id="addProjectBtn">+</button>
+
+    <!-- 添加项目模态框 -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">添加新项目</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <form id="projectForm">
+                <div class="form-group">
+                    <label class="form-label">项目名称 *</label>
+                    <input type="text" class="form-input" id="projectTitle" placeholder="输入项目名称" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">项目描述 *</label>
+                    <textarea class="form-textarea" id="projectDescription" placeholder="描述您的项目..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">技术标签（按 Enter 添加）</label>
+                    <div class="tags-input-container" id="tagsContainer">
+                        <input type="text" class="tag-input" id="tagInput" placeholder="输入标签后按 Enter">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">项目链接</label>
+                    <input type="url" class="form-input" id="projectLink" placeholder="https://example.com">
+                </div>
+                <button type="submit" class="submit-btn">添加项目</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 标签管理
+        const tagsContainer = document.getElementById('tagsContainer');
+        const tagInput = document.getElementById('tagInput');
+        const tags = [];
+
+        tagInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const tagValue = this.value.trim();
+                if (tagValue && !tags.includes(tagValue)) {
+                    tags.push(tagValue);
+                    addTagElement(tagValue);
+                    this.value = '';
+                }
+            }
+        });
+
+        function addTagElement(tagValue) {
+            const tagItem = document.createElement('div');
+            tagItem.className = 'tag-item';
+            tagItem.innerHTML = `
+                ${tagValue}
+                <span class="tag-remove" onclick="removeTag('${tagValue}', this)">&times;</span>
+            `;
+            tagsContainer.insertBefore(tagItem, tagInput);
+        }
+
+        function removeTag(tagValue, element) {
+            const index = tags.indexOf(tagValue);
+            if (index > -1) {
+                tags.splice(index, 1);
+            }
+            element.parentElement.remove();
+        }
+
+        // 模态框控制
+        const modal = document.getElementById('projectModal');
+        const addProjectBtn = document.getElementById('addProjectBtn');
+        const closeModal = document.getElementById('closeModal');
+        const projectForm = document.getElementById('projectForm');
+        const projectsGrid = document.querySelector('.projects-grid');
+
+        addProjectBtn.addEventListener('click', () => {
+            modal.classList.add('active');
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+
+        // 表单提交
+        projectForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('projectTitle').value;
+            const description = document.getElementById('projectDescription').value;
+            const link = document.getElementById('projectLink').value;
+
+            // 创建新项目卡片
+            const projectCard = document.createElement('div');
+            projectCard.className = 'project-card';
+            projectCard.style.animationDelay = '0s';
+            
+            let tagsHTML = '';
+            tags.forEach(tag => {
+                tagsHTML += `<span class="tag">${tag}</span>`;
+            });
+
+            projectCard.innerHTML = `
+                <h2 class="project-title">${title}</h2>
+                <p class="project-description">${description}</p>
+                <div class="project-tags">
+                    ${tagsHTML}
+                </div>
+                ${link ? `<a href="${link}" class="project-link">查看项目 →</a>` : ''}
+            `;
+
+            // 添加点击事件
+            projectCard.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('project-link')) {
+                    const linkElement = this.querySelector('.project-link');
+                    if (linkElement) linkElement.click();
+                }
+            });
+
+            // 添加到网格
+            projectsGrid.appendChild(projectCard);
+
+            // 重置表单
+            projectForm.reset();
+            tags.length = 0;
+            tagsContainer.querySelectorAll('.tag-item').forEach(item => item.remove());
+            modal.classList.remove('active');
+        });
+
+        // 为项目卡片添加点击效果
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('project-link')) {
+                    const link = this.querySelector('.project-link');
+                    if (link) link.click();
+                }
+            });
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
