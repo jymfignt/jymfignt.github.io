@@ -299,6 +299,106 @@
             background: #2b6cb0;
         }
 
+        .code-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 300;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .code-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .code-modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        .code-section {
+            margin-bottom: 30px;
+        }
+
+        .code-section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .code-instruction {
+            background: #edf2f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            position: relative;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #2b6cb0;
+        }
+
+        .copy-btn.copied {
+            background: #48bb78;
+        }
+
+        .close-code-btn {
+            width: 100%;
+            padding: 14px;
+            background: #718096;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .close-code-btn:hover {
+            background: #4a5568;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -424,6 +524,33 @@
         </div>
     </div>
 
+    <!-- 代码提示模态框 -->
+    <div class="code-modal" id="codeModal">
+        <div class="code-modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">✅ 项目已添加！</h2>
+                <button class="close-btn" id="closeCodeModal">&times;</button>
+            </div>
+
+            <div class="code-section">
+                <h3 class="code-section-title">📍 添加位置</h3>
+                <div class="code-instruction">
+                    在您的 HTML 文件中，找到 <strong>&lt;div class="projects-grid"&gt;</strong> 标签内部，将以下代码添加到最后一个项目卡片之后（在 &lt;/div&gt; 结束标签之前）
+                </div>
+            </div>
+
+            <div class="code-section">
+                <h3 class="code-section-title">📝 要添加的代码</h3>
+                <div style="position: relative;">
+                    <pre class="code-block" id="generatedCode"></pre>
+                    <button class="copy-btn" id="copyCodeBtn">复制代码</button>
+                </div>
+            </div>
+
+            <button class="close-code-btn" id="closeCodeModalBtn">关闭</button>
+        </div>
+    </div>
+
     <!-- 添加项目按钮 -->
     <button class="add-project-btn" id="addProjectBtn">+</button>
 
@@ -459,6 +586,28 @@
     </div>
 
     <script>
+        // 本地存储管理
+        const STORAGE_KEY = 'userProjects';
+        
+        // 加载保存的项目
+        function loadProjects() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const projects = JSON.parse(saved);
+                projects.forEach(project => {
+                    createProjectCard(project, false);
+                });
+            }
+        }
+
+        // 保存项目到本地存储
+        function saveProject(project) {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            const projects = saved ? JSON.parse(saved) : [];
+            projects.push(project);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+        }
+
         // 标签管理
         const tagsContainer = document.getElementById('tagsContainer');
         const tagInput = document.getElementById('tagInput');
@@ -501,6 +650,13 @@
         const projectForm = document.getElementById('projectForm');
         const projectsGrid = document.querySelector('.projects-grid');
 
+        // 代码模态框
+        const codeModal = document.getElementById('codeModal');
+        const closeCodeModal = document.getElementById('closeCodeModal');
+        const closeCodeModalBtn = document.getElementById('closeCodeModalBtn');
+        const copyCodeBtn = document.getElementById('copyCodeBtn');
+        const generatedCode = document.getElementById('generatedCode');
+
         addProjectBtn.addEventListener('click', () => {
             modal.classList.add('active');
         });
@@ -515,6 +671,34 @@
             }
         });
 
+        // 关闭代码模态框
+        closeCodeModal.addEventListener('click', () => {
+            codeModal.classList.remove('active');
+        });
+
+        closeCodeModalBtn.addEventListener('click', () => {
+            codeModal.classList.remove('active');
+        });
+
+        codeModal.addEventListener('click', (e) => {
+            if (e.target === codeModal) {
+                codeModal.classList.remove('active');
+            }
+        });
+
+        // 复制代码
+        copyCodeBtn.addEventListener('click', () => {
+            const code = generatedCode.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                copyCodeBtn.textContent = '✓ 已复制';
+                copyCodeBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyCodeBtn.textContent = '复制代码';
+                    copyCodeBtn.classList.remove('copied');
+                }, 2000);
+            });
+        });
+
         // 表单提交
         projectForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -523,23 +707,73 @@
             const description = document.getElementById('projectDescription').value;
             const link = document.getElementById('projectLink').value;
 
-            // 创建新项目卡片
+            const project = {
+                title: title,
+                description: description,
+                tags: [...tags],
+                link: link,
+                timestamp: new Date().getTime()
+            };
+
+            // 保存到本地存储
+            saveProject(project);
+
+            // 创建并显示项目卡片
+            createProjectCard(project, true);
+
+            // 生成 HTML 代码
+            generateHTMLCode(project);
+
+            // 重置表单
+            projectForm.reset();
+            tags.length = 0;
+            tagsContainer.querySelectorAll('.tag-item').forEach(item => item.remove());
+            modal.classList.remove('active');
+
+            // 显示代码模态框
+            codeModal.classList.add('active');
+        });
+
+        // 生成 HTML 代码
+        function generateHTMLCode(project) {
+            let tagsHTML = '';
+            project.tags.forEach(tag => {
+                tagsHTML += `\n                   <span class="tag">${tag}</span>`;
+            });
+
+            const htmlCode = `            <div class="project-card">
+                <h2 class="project-title">${project.title}</h2>
+                <p class="project-description">
+                    ${project.description}
+                </p>
+                <div class="project-tags">${tagsHTML}
+                </div>${project.link ? `
+                <a href="${project.link}" class="project-link">查看项目 →</a>` : ''}
+            </div>`;
+
+            generatedCode.textContent = htmlCode;
+        }
+
+        // 创建项目卡片
+        function createProjectCard(project, animate) {
             const projectCard = document.createElement('div');
             projectCard.className = 'project-card';
-            projectCard.style.animationDelay = '0s';
+            if (animate) {
+                projectCard.style.animationDelay = '0s';
+            }
             
             let tagsHTML = '';
-            tags.forEach(tag => {
+            project.tags.forEach(tag => {
                 tagsHTML += `<span class="tag">${tag}</span>`;
             });
 
             projectCard.innerHTML = `
-                <h2 class="project-title">${title}</h2>
-                <p class="project-description">${description}</p>
+                <h2 class="project-title">${project.title}</h2>
+                <p class="project-description">${project.description}</p>
                 <div class="project-tags">
                     ${tagsHTML}
                 </div>
-                ${link ? `<a href="${link}" class="project-link">查看项目 →</a>` : ''}
+                ${project.link ? `<a href="${project.link}" class="project-link" target="_blank">查看项目 →</a>` : ''}
             `;
 
             // 添加点击事件
@@ -552,13 +786,7 @@
 
             // 添加到网格
             projectsGrid.appendChild(projectCard);
-
-            // 重置表单
-            projectForm.reset();
-            tags.length = 0;
-            tagsContainer.querySelectorAll('.tag-item').forEach(item => item.remove());
-            modal.classList.remove('active');
-        });
+        }
 
         // 为项目卡片添加点击效果
         document.querySelectorAll('.project-card').forEach(card => {
@@ -582,6 +810,9 @@
                 }
             });
         });
+
+        // 页面加载时加载保存的项目
+        window.addEventListener('DOMContentLoaded', loadProjects);
     </script>
 </body>
 </html>
