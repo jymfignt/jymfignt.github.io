@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multi Search</title>
     <style>
         body {
@@ -26,12 +27,14 @@
             flex-direction: column;
             justify-content: center;
             gap: 20px;
+            padding: 20px;
             padding-bottom: 30px;
         }
 
         form {
             margin: 0 auto;
             max-width: 500px;
+            width: 100%;
         }
 
         input[type="search"] {
@@ -55,6 +58,7 @@
         .google { background-color: #4285F4; }
         .bing { background-color: #008373; }
         .xiaohongshu { background-color: #fb4c53; }
+        .bilibili { background-color: #00a1d6; }
         .zhihu { background-color: #0084ff; }
         .translate { background-color: #34a853; }
         .chatgpt { background-color: #202123; }
@@ -77,41 +81,44 @@
     </header>
 
     <main>
-        <form action="https://www.google.com/search" method="get">
+        <form action="https://www.google.com/search" method="get" target="_blank">
             <input autocomplete="off" name="q" placeholder="Search on Google" type="search">
             <button class="google" type="submit">Google</button>
         </form>
-        <form action="https://www.bing.com/search" method="get">
+        <form action="https://www.bing.com/search" method="get" target="_blank">
             <input autocomplete="off" name="q" placeholder="Search on Bing" type="search">
             <button class="bing" type="submit">Bing</button>
         </form>
-        <form action="https://scholar.google.com/scholar" method="get">
+        <form action="https://scholar.google.com/scholar" method="get" target="_blank">
             <input autocomplete="off" name="q" placeholder="Search academic papers" type="search">
             <button class="scholar" type="submit">Google Scholar</button>
         </form>
-        <form action="https://www.xiaohongshu.com/search_result" method="get">
+        <form action="https://www.xiaohongshu.com/search_result" method="get" target="_blank">
             <input autocomplete="off" name="keyword" placeholder="Search on 小红书" type="search">
             <button class="xiaohongshu" type="submit">小红书</button>
         </form>
-
-        <form action="https://www.zhihu.com/search" method="get">
+        <form action="https://search.bilibili.com/all" method="get" target="_blank">
+            <input autocomplete="off" name="keyword" placeholder="Search on 哔哩哔哩" type="search">
+            <button class="bilibili" type="submit">B站</button>
+        </form>
+        <form action="https://www.zhihu.com/search" method="get" target="_blank">
             <input autocomplete="off" name="q" placeholder="Search on 知乎" type="search">
             <button class="zhihu" type="submit">知乎</button>
         </form>
-        <form action="https://translate.google.com/" method="get">
+        <form action="https://translate.google.com/" method="get" target="_blank">
             <input autocomplete="off" name="text" placeholder="Text to translate" type="search">
             <button class="translate" type="submit">翻译</button>
         </form>
         <form action="https://chat.openai.com/" method="get" target="_blank">
-            <input autocomplete="off" name="q" placeholder="Chat with ChatGPT" type="search">
+            <input autocomplete="off" placeholder="Chat with ChatGPT" type="search">
             <button class="chatgpt" type="submit">ChatGPT</button>
         </form>
-        <form action="https://gemini.google.com/app?hl=en-IN" method="get" target="_blank">
-            <input autocomplete="off" name="q" placeholder="Chat with Gemini" type="search">
+        <form action="https://gemini.google.com/app" method="get" target="_blank">
+            <input autocomplete="off" placeholder="Chat with Gemini" type="search">
             <button class="gemini" type="submit">Gemini</button>
         </form>
-        <form action="https://grok.com/?referrer=website" method="get" target="_blank">
-            <input autocomplete="off" name="q" placeholder="Chat with Grok" type="search">
+        <form action="https://grok.com/" method="get" target="_blank">
+            <input autocomplete="off" placeholder="Chat with Grok" type="search">
             <button class="grok" type="submit">Grok</button>
         </form>
     </main>
