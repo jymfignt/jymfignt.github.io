@@ -22,24 +22,7 @@
 
 <body>
     <div id="body-wrap">
-        <nav class="not_index_bg" id="nav" style="background-image:url(https://api.ixiaowai.cn/api/api.php)">
-            <div id="page_site-info">
-                <div id="site-title">
-                    <span class="blogtitle"></span>
-                    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
-                    <script>
-                        var typed = new Typed(".blogtitle", {
-                            strings: ['求知若饥，虚心若愚', 'Stay Hungry Stay Foolish'],
-                            startDelay: 300,
-                            typeSpeed: 100,
-                            loop: true,
-                            backSpeed: 50,
-                            showCursor: true
-                        });
-                    </script>
-                </div>
-            </div>
-        </nav>
+      
         <main id="content-outer">
             <div class="layout_page" id="content-inner">
                 <div class="aside_content" id="aside_content">
@@ -155,7 +138,6 @@
                         <hr>
                         <h2>收藏</h2>
                         <div class="tool">
-                            <a href="http://tooool.org/" target="_blank" rel="noopener noreferrer">程序员导航、</a>
                             <a href="https://adzhp.cn/" target="_blank" rel="noopener noreferrer">爱达杂货铺、</a>
                             <a href="http://ifeve.com/" target="_blank" rel="noopener noreferrer">并发编程网</a>
                         </div>
@@ -165,7 +147,7 @@
         </main>
         <footer id="footer">
             <div id="footer-wrap">
-                <div class="copyright">&copy;2024 - 2026 BY Jing</div>
+                <div class="copyright">&copy BY Jing</div>
             </div>
         </footer>
     </div>
@@ -181,7 +163,6 @@
     <script type="text/javascript">
         console.clear();
         console.log("%c 有朋自远方来, 不亦说乎.", "background:#24272A; color:#ffffff", "");
-        console.log("%c Github %c", "background:#24272A; color:#ffffff", "", "https://github.com/laoxuai");
         console.log("%c 版本号: %c", "background:#24272A; color:#ffffff", "", "1.0.0");
 
         // 雪花效果
@@ -236,7 +217,7 @@
                 clearTimeout(titleTime);
             } else {
                 $('[rel="icon"]').attr('href', "/favicon.ico");
-                document.title = '(ฅ>ω<*ฅ) 噫又好啦 ~' + OriginTitle;
+                document.title = '(ฅ>ω<*ฅ) 又好啦 ~' + OriginTitle;
                 titleTime = setTimeout(function () {
                     document.title = OriginTitle;
                 }, 2000);
