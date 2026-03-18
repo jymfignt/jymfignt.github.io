@@ -338,3 +338,67 @@ aside_content .card-info .author-info__description {
 ::-webkit-scrollbar-track {
     background-color: transparent
 }
+/* ===== 响应式修复 ===== */
+
+/* 小屏让内容在上、侧栏在下 */
+@media screen and (max-width: 900px) {
+    .layout_page {
+        flex-direction: column-reverse; /* article先显示，aside后显示 */
+        padding: 0 8px;
+    }
+
+    #page {
+        width: 100% !important;
+        padding: 1.2rem 1rem; /* 减少左右内边距 */
+        margin-top: 8px;
+    }
+
+    #aside_content {
+        width: 100% !important;
+        margin-top: 8px;
+    }
+
+    /* 技能条撑满容器 */
+    .skillbar {
+        max-width: 100%;
+        margin: 10px 0;
+    }
+
+    /* nav 高度在小屏缩小 */
+    #nav.not_index_bg {
+        height: 14rem;
+    }
+
+    #page_site-info {
+        top: 6rem;
+    }
+
+    #site-title {
+        font-size: 1.1rem;
+        padding: 0 1rem;
+    }
+}
+
+/* 超小屏（手机竖屏） */
+@media screen and (max-width: 480px) {
+    #nav.not_index_bg {
+        height: 12rem;
+    }
+
+    #page_site-info {
+        top: 4.5rem;
+    }
+
+    #page {
+        padding: 1rem 0.8rem;
+    }
+
+    .skillbar {
+        height: 28px;
+    }
+
+    .skillbar .skillbar-title span {
+        font-size: 0.78rem;
+        padding: 0 12px;
+    }
+}
