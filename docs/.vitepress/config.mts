@@ -2,7 +2,6 @@ import { defineConfig } from 'vitepress'
 import { generateSidebar } from 'vitepress-sidebar'
 
 export default defineConfig({
-  base: '/skills-github-pages/',
   title: "Maini's Space",
   description: "Computer Science & Technical Notes",
   lang: 'zh-CN',
