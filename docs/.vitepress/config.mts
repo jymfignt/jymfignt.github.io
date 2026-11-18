@@ -10,7 +10,8 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '作品集', link: '/projects/' },
-      { text: '技术文章', link: '/posts/hello' }
+      { text: '技术文章', link: '/posts/hello' },
+      { text: '文艺角 ☕', link: '/arts/' }
     ],
     // 自动扫描 posts 和 projects 文件夹生成左侧目录
     sidebar: generateSidebar([
