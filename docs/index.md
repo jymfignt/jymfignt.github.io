@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
     - text: 查看作品集
-      link: /projects
+      link: /projects/
     - theme: alt
     - text: 阅读文章
       link: /posts/hello
