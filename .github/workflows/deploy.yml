@@ -26,10 +26,6 @@ jobs:
         run: npm install
       - name: Build with VitePress
         run: npm run docs:build
-      - name: Copy wordbook into dist
-        run: |
-          mkdir -p docs/.vitepress/dist/words
-          cp -r words/. docs/.vitepress/dist/words/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
